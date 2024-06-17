@@ -39,10 +39,10 @@ export default {
   transition-duration: 300ms;
 }
 .open {
-  left: 362px;
+  left: 22.7rem;
 }
 .close {
-  left: 92px;
+  left: 5.7rem;
 }
 .opener:hover {
   transition-duration: 300ms;
