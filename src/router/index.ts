@@ -4,6 +4,7 @@ import DashboardView from '@/views/DashboardView.vue'
 import DashboardHomeView from '@/views/Dashboard/DashboardHomeView.vue'
 import DashboardViewFocused from '@/views/DashboardViewFocused.vue'
 import DashboardModulesView from '@/views/Dashboard/DashboardModulesView.vue'
+import DashboardSettingsView from '@/views/Dashboard/DashboardSettingsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,7 +37,7 @@ const router = createRouter({
         {
           path: 'settings',
           name: 'settings',
-          component: DashboardHomeView
+          component: DashboardSettingsView
         },
         {
           path: 'modules-config/:module_id',

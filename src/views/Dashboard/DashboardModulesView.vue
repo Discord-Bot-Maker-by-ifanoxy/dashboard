@@ -4,27 +4,62 @@ import Title from '@/components/Utils/Title.vue'
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
   components: { Title },
+  created() {
+    this.filteredModules = [...this.modules]
+  },
   data() {
     return {
       searchValue: '',
+      filteredModules: [],
       modules: [
-        ...new Array(10).keys().map(() => [
-          {
-            name: 'MODULE NAME',
-            image_url: 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg',
-            tags: ['MODERATION'],
-            description:
-              'Ipsum elit excepteur aliqua nostrud. Laboris sint nostrud mollit veniam dolor esse mollit mollit proident deserunt sunt incididunt ullamco.',
-            download: 1000,
-            stars: 10,
-            commands_count: 20,
-            favorite: false,
-            has: false
-          }
-        ])
-      ].flat(),
+        {
+          name: 'MODULE NAME',
+          image_url: 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg',
+          tags: ['FAVORITES', 'MODERATION'],
+          description:
+            'Ipsum elit excepteur aliqua nostrud. Laboris sint nostrud mollit veniam dolor esse mollit mollit proident deserunt sunt incididunt ullamco.',
+          download: 1000,
+          stars: 10,
+          commands_count: 20
+        },
+        {
+          name: 'MODULE NAME',
+          image_url: 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg',
+          tags: ['INSTALLED', 'MODERATION'],
+          description:
+            'Ipsum elit excepteur aliqua nostrud. Laboris sint nostrud mollit veniam dolor esse mollit mollit proident deserunt sunt incididunt ullamco.',
+          download: 929,
+          stars: 129,
+          commands_count: 27
+        },
+        {
+          name: 'MODULE NAME',
+          image_url: 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg',
+          tags: ['INSTALLED', 'ADMINISTRATION'],
+          description:
+            'Ipsum elit excepteur aliqua nostrud. Laboris sint nostrud mollit veniam dolor esse mollit mollit proident deserunt sunt incididunt ullamco.',
+          download: 2819,
+          stars: 12,
+          commands_count: 1
+        }
+      ],
       tags: ['INSTALLED', 'FAVORITES', 'MODERATION', 'ADMINISTRATION', 'CUSTOMIZATION', 'GAMES'],
       selected_tags: []
+    }
+  },
+  methods: {
+    search(s) {
+      this.searchValue = s.target.value
+      this.filteredModules = this.modules.filter(
+        (x) =>
+          x.description.toLowerCase().includes(this.searchValue.toLowerCase()) ||
+          x.name.toLowerCase().includes(this.searchValue.toLowerCase())
+      )
+    },
+    changeTag() {
+      this.filteredModules = this.modules.filter((x) =>
+        this.selected_tags.every((y) => x.tags.includes(y))
+      )
     }
   }
 }
@@ -54,7 +89,7 @@ export default {
         </svg>
 
         <input
-          @input="(s) => (searchValue = s.value)"
+          v-on:input="search"
           :value="searchValue"
           class="ml-4 bg-transparent w-full focus:outline-0"
         />
@@ -62,11 +97,12 @@ export default {
       <div class="flex flex-row flex-wrap gap-3 text-sm justify-between items-stretch font-bold">
         <div class="flex justify-between flex-1" v-for="tag of selected_tags" :key="tag">
           <div
-            class="select-none w-full cursor-pointer bg-primary text-dark flex space-b items-center justify-center px-3 pt-1.5 pb-1 rounded-lg"
+            class="select-none bg-primary w-full cursor-pointer text-dark flex space-b items-center justify-center px-3 pt-1.5 pb-1 rounded-lg"
             @click="
               selected_tags.includes(tag)
                 ? (selected_tags = selected_tags.filter((x) => x != tag))
-                : selected_tags.push(tag)
+                : selected_tags.push(tag),
+                changeTag()
             "
           >
             {{ tag }}
@@ -78,11 +114,12 @@ export default {
           :key="tag"
         >
           <div
-            class="select-none w-full cursor-pointer flex space-b items-center bg-dark justify-center px-3 pt-1.5 pb-1 rounded-lg"
+            class="select-none bg-dark w-full cursor-pointer flex space-b items-center justify-center px-3 pt-1.5 pb-1 rounded-lg"
             @click="
               selected_tags.includes(tag)
                 ? (selected_tags = selected_tags.filter((x) => x != tag))
-                : selected_tags.push(tag)
+                : selected_tags.push(tag),
+                changeTag()
             "
           >
             {{ tag }}
@@ -92,16 +129,16 @@ export default {
     </div>
     <div class="modules flex-shrink h-3/4 overflow-y-auto rounded-lg">
       <div class="flex flex-col w-full h-96 gap-4">
-        <div v-for="index of Array(Math.ceil(modules.length / 3)).keys()" :key="index">
-          <div class="flex justify-center w-full gap-4 items-stretch">
-            <div class="flex-1" v-for="mod of modules.slice(index * 3, 3 + index * 3)" :key="mod">
-              <div class="px-10 flex gap-2 flex-col items-center w-full bg-dark p-4 rounded-lg">
-                <p class="text-xl">{{ mod.name }}</p>
-                <img :src="mod.image_url" class="rounded-lg w-auto" alt="Module image" />
-                <div class="flex flex-wrap gap-3 text-xs w-full">
+        <div v-for="index of Array(Math.ceil(filteredModules.length / 3)).keys()" :key="index">
+          <div class="flex w-full gap-4">
+            <div v-for="mod of filteredModules.slice(index * 3, 3 + index * 3)" :key="mod">
+              <div class="px-10 flex gap-2 flex-col items-stretch max-w-xl bg-dark p-4 rounded-lg">
+                <p class="text-xl text-center">{{ mod.name }}</p>
+                <img :src="mod.image_url" class="rounded-lg" alt="Module image" />
+                <div class="flex gap-3 text-xs w-full">
                   <div v-for="tag of mod.tags" :key="tag">
                     <div
-                      class="select-none w-full bg-primary text-dark flex items-center justify-center px-3 pt-1.5 pb-1 rounded-md"
+                      class="select-none bg-primary w-full text-dark flex items-center justify-center px-3 pt-1.5 pb-1 rounded-md"
                     >
                       {{ tag }}
                     </div>
@@ -151,14 +188,14 @@ export default {
 
                 <div class="w-full pt-6">
                   <div
-                    v-if="mod.has"
-                    class="p-3 pt-4 cursor-pointer bg-red-400 text-dark rounded-md flex justify-center w-full hover:bg-red-600 duration-300 hover:text-white hover:font-normal"
+                    v-if="mod.tags.includes('INSTALLED')"
+                    class="p-3 mb-4 pt-4 cursor-pointer bg-red-400 text-dark rounded-md flex justify-center w-full hover:bg-red-600 duration-300 hover:text-white hover:font-normal"
                   >
                     REMOVE MODULE
                   </div>
                   <div
                     v-else
-                    class="add-module p-3 pt-4 cursor-pointer bg-primary text-dark rounded-md flex justify-center w-full"
+                    class="add-module mb-4 p-3 pt-4 cursor-pointer bg-primary text-dark rounded-md flex justify-center w-full"
                   >
                     ADD MODULE
                   </div>

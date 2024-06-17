@@ -36,7 +36,7 @@ export default {
     >
       {{ bot_data.name }}
     </p>
-    <hr class="w-full size-2 bg-dark rounded-full border-0" />
+    <hr class="w-full size-1.5 bg-dark rounded-full border-0" />
     <div class="parameters w-full">
       <ul class="w-full text-white font-extrabold">
         <li
@@ -65,7 +65,7 @@ export default {
     <p class="flex l-0 w-full font-extrabold" style="margin-bottom: -10px">
       MODULES CONFIGURATIONS
     </p>
-    <hr class="w-full size-2 bg-dark rounded-full border-0" />
+    <hr class="w-full size-1.5 bg-dark rounded-full border-0" />
     <div class="modules-config w-full">
       <ul class="w-full text-white font-extrabold">
         <li

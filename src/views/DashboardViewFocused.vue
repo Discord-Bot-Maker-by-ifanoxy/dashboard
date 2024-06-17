@@ -7,8 +7,8 @@ import SecondarySidebar from '@/components/SecondarySidebar/SecondarySidebar.vue
 <template>
   <Navbar />
   <div class="flex center flex-grow">
-    <Sidbar />
-    <div class="mx-8 my-6 flex gap-6 flex-grow">
+    <Sidbar class="flex-2" />
+    <div class="mx-8 my-6 flex gap-6 flex-1">
       <SecondarySidebar v-show="$route.params.id" />
       <router-view class="rounded-xl p-5 bg-dark-grey w-full" />
     </div>
