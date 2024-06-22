@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar.vue'
 
 <template>
   <div class="max-h-screen h-screen dashboard flex flex-col bg-grey">
-    <navbar :login="isLoggin" />
+    <navbar :user="user" />
     <RouterView v-slot="{ Component, route }">
       <transition>
         <div class="flex flex-col flex-grow component-wrapper" :key="route.path">
@@ -17,12 +17,24 @@ import Navbar from '@/components/Navbar.vue'
 </template>
 
 <script lang="ts">
+import { API } from '@/script/api'
+
 export default {
-  methods: {
-    isLoggin() {
-      const access_token = localStorage.getItem('access_token')
-      if (access_token) return true
-      return false
+  name: 'app',
+  provide() {
+    return {
+      getUser: () => {
+        return this.user
+      }
+    }
+  },
+  async beforeMount() {
+    const res = await API.check(localStorage.getItem('access_token'))
+    if (res.status === 200) this.user = res.data
+  },
+  data() {
+    return {
+      user: null
     }
   }
 }

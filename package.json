@@ -16,6 +16,7 @@
   "dependencies": {
     "@primevue/themes": "^4.0.0-rc.1",
     "@types/gsap": "^3.0.0",
+    "axios": "^1.7.2",
     "flowbite": "^2.3.0",
     "gsap": "^3.12.5",
     "pinia": "^2.1.7",

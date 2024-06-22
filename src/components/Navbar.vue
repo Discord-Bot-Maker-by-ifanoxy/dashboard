@@ -18,13 +18,21 @@
         <div class="w-80 justify-end flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <div
             class="flex gap-6 duration-300 hover:bg-dark-grey hover:rounded-xl rounded-lg text-lg px-4 py-2 cursor-pointer text-center z-10"
-            v-if="login"
+            v-if="user"
           >
-            <img src="@/assets/alt-logo.png" class="rounded-full" width="48" height="48" />
-            <button type="button" class="px-2 font-black text-white">USERNAME</button>
+            <img
+              :src="`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`"
+              class="rounded-full"
+              width="48"
+              height="48"
+            />
+            <button type="button" class="px-2 text-2xl font-black text-white">
+              {{ user.username.toUpperCase() }}
+            </button>
           </div>
           <div v-else>
             <button
+              @click="$router.push('/login')"
               type="button"
               class="text-dark font-black bg-primary duration-300 hover:bg-white hover:rounded-xl rounded-lg text-lg px-20 py-2 text-center z-10"
             >
@@ -55,7 +63,7 @@
             </li>
             <li>
               <a
-                @click="$router.push('/')"
+                @click="$router.push('/dashboard')"
                 class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
                 >DASHBOARD</a
               >
@@ -136,6 +144,6 @@
 </style>
 <script lang="ts">
 export default {
-  props: ['login']
+  props: ['user']
 }
 </script>

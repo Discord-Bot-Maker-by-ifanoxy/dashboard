@@ -1,49 +1,26 @@
 <script lang="ts">
 import Title from '@/components/Utils/Title.vue'
+import { API } from '@/script/api'
 
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
   components: { Title },
-  created() {
+  async beforeMount() {
+    this.loaded = false
+    this.modules = ((await API.modules.get().catch(() => {}))?.data ?? []).map((x) => ({
+      ...x,
+      image_url: 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg'
+    }))
     this.filteredModules = [...this.modules]
+    this.loaded = true
   },
   data() {
     return {
+      loaded: false,
       searchValue: '',
       filteredModules: [],
-      modules: [
-        {
-          name: 'MODULE NAME',
-          image_url: 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg',
-          tags: ['FAVORITES', 'MODERATION'],
-          description:
-            'Ipsum elit excepteur aliqua nostrud. Laboris sint nostrud mollit veniam dolor esse mollit mollit proident deserunt sunt incididunt ullamco.',
-          download: 1000,
-          stars: 10,
-          commands_count: 20
-        },
-        {
-          name: 'MODULE NAME',
-          image_url: 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg',
-          tags: ['INSTALLED', 'MODERATION'],
-          description:
-            'Ipsum elit excepteur aliqua nostrud. Laboris sint nostrud mollit veniam dolor esse mollit mollit proident deserunt sunt incididunt ullamco.',
-          download: 929,
-          stars: 129,
-          commands_count: 27
-        },
-        {
-          name: 'MODULE NAME',
-          image_url: 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg',
-          tags: ['INSTALLED', 'ADMINISTRATION'],
-          description:
-            'Ipsum elit excepteur aliqua nostrud. Laboris sint nostrud mollit veniam dolor esse mollit mollit proident deserunt sunt incididunt ullamco.',
-          download: 2819,
-          stars: 12,
-          commands_count: 1
-        }
-      ],
-      tags: ['INSTALLED', 'FAVORITES', 'MODERATION', 'ADMINISTRATION', 'CUSTOMIZATION', 'GAMES'],
+      modules: [],
+      tags: ['Installed', 'Favorites', 'Moderation', 'Administration', 'Fun', 'Games'],
       selected_tags: []
     }
   },
@@ -105,7 +82,7 @@ export default {
                 changeTag()
             "
           >
-            {{ tag }}
+            {{ tag.toUpperCase() }}
           </div>
         </div>
         <div
@@ -122,17 +99,17 @@ export default {
                 changeTag()
             "
           >
-            {{ tag }}
+            {{ tag.toUpperCase() }}
           </div>
         </div>
       </div>
     </div>
-    <div class="modules flex-shrink h-3/4 overflow-y-auto rounded-lg">
+    <div v-if="loaded" class="modules flex flex-grow h-3/4 overflow-y-auto rounded-lg">
       <div class="flex flex-col w-full h-96 gap-4">
         <div v-for="index of Array(Math.ceil(filteredModules.length / 3)).keys()" :key="index">
           <div class="flex w-full gap-4">
             <div v-for="mod of filteredModules.slice(index * 3, 3 + index * 3)" :key="mod">
-              <div class="px-10 flex gap-2 flex-col items-stretch max-w-xl bg-dark p-4 rounded-lg">
+              <div class="px-10 flex gap-2 flex-col items-stretch max-w-lg bg-dark p-4 rounded-lg">
                 <p class="text-xl text-center">{{ mod.name }}</p>
                 <img :src="mod.image_url" class="rounded-lg" alt="Module image" />
                 <div class="flex gap-3 text-xs w-full">
@@ -140,14 +117,14 @@ export default {
                     <div
                       class="select-none bg-primary w-full text-dark flex items-center justify-center px-3 pt-1.5 pb-1 rounded-md"
                     >
-                      {{ tag }}
+                      {{ tag.toUpperCase() }}
                     </div>
                   </div>
                 </div>
                 <p class="font-normal">{{ mod.description }}</p>
                 <div class="w-full text-lg flex gap-2">
                   <p class="font-bold">Commands count:</p>
-                  <span>{{ mod.commands_count }}</span>
+                  <span>{{ mod.commands }}</span>
                 </div>
                 <div class="flex justify-between w-full">
                   <div class="flex gap-3">
@@ -163,7 +140,7 @@ export default {
                         fill="#3BA565"
                       />
                     </svg>
-                    <span class="pt-1">{{ mod.download }}</span>
+                    <span class="pt-1">{{ mod.downloads }}</span>
                   </div>
                   <div class="flex gap-3">
                     <svg

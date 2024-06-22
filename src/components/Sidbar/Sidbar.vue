@@ -5,7 +5,9 @@ import BotIcon from '@/components/Sidbar/BotIcon.vue'
 import { computed } from 'vue'
 
 export default {
+  props: ['bots'],
   components: { BotIcon, Opener, BotRaw },
+  async beforeMount() {},
   created() {
     this.opened = localStorage.getItem('sidebar-opened') == 'true'
     window.addEventListener('resize', () => {
@@ -14,18 +16,6 @@ export default {
   },
   data() {
     return {
-      bots: [
-        {
-          name: 'MEE6',
-          bot_id: 123456789,
-          image_url: 'https://pbs.twimg.com/profile_images/1596115537481940992/Ea4pTA2G_400x400.jpg'
-        },
-        {
-          name: 'IFANOXY BOT TESTER',
-          bot_id: 987654321,
-          image_url: 'https://pbs.twimg.com/profile_images/1596115537481940992/Ea4pTA2G_400x400.jpg'
-        }
-      ],
       opened: localStorage.getItem('sidebar-opened') == 'true'
     }
   },
@@ -45,10 +35,10 @@ export default {
       <div class="open flex flex-col gap-6">
         <div v-for="bot of bots">
           <BotRaw
-            @click="$router.push(`/dashboard/${bot.bot_id}`)"
+            @click="$router.push(`/dashboard/${bot.name}`)"
             :name="bot.name"
             :id="bot.bot_id"
-            :image_url="bot.image_url"
+            :image_url="bot.image"
           />
         </div>
         <div
@@ -73,14 +63,15 @@ export default {
         <div v-for="bot of bots">
           <div class="flex justify-center items-center">
             <BotIcon
-              @click="$router.push(`/dashboard/${bot.bot_id}`)"
-              :id="bot.bot_id"
-              :image_url="bot.image_url"
+              @click="$router.push(`/dashboard/${bot.name}`)"
+              :id="bot.name"
+              :image_url="bot.image"
             />
           </div>
         </div>
         <div class="flex justify-center items-center">
           <div
+            @click="$router.push(`/dashboard/create-bot`)"
             class="add-bot justify-center gap-6 p-4 h-16 w-16 border-4 border-dark rounded-full flex items-center hover:border-primary hover:cursor-pointer text-white duration-300"
           >
             <svg

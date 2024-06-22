@@ -7,6 +7,8 @@ import DashboardModulesView from '@/views/Dashboard/DashboardModulesView.vue'
 import DashboardSettingsView from '@/views/Dashboard/DashboardSettingsView.vue'
 import LoginView from '@/views/LoginView.vue'
 import LoginCallBack from '@/callback/LoginCallBack.vue'
+import { API } from '@/script/api'
+import DashboardCreateBotView from '@/views/Dashboard/DashboardCreateBotView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +35,12 @@ const router = createRouter({
       meta: {
         login: true
       }
+    },
+
+    {
+      path: '/dashboard/create-bot',
+      name: 'create-bot',
+      component: DashboardCreateBotView
     },
     {
       path: '/dashboard/:id',
@@ -67,19 +75,21 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (to?.meta?.login) {
-    const access_token = localStorage.getItem('access_token')
+router.beforeEach(async (to, from, next) => {
+  try {
+    if (to?.meta?.login) {
+      const access_token = localStorage.getItem('access_token')
 
-    if (!access_token) next({ name: 'login' })
+      if (!access_token) next({ name: 'login' })
 
-    const auth = true
+      const res = await API.check(access_token)
 
-    if (!auth) next({ name: 'login' })
-
+      if (res.status !== 200) next({ name: 'login' })
+    }
     next()
+  } catch {
+    next(from)
   }
-  next()
 })
 
 export default router
