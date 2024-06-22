@@ -5,7 +5,6 @@ import SecondarySidebar from '@/components/SecondarySidebar/SecondarySidebar.vue
 </script>
 
 <template>
-  <Navbar />
   <div class="flex center flex-grow">
     <Sidbar class="flex-2" />
     <div class="mx-8 my-6 flex gap-6 flex-1">

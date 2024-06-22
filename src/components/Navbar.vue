@@ -1,9 +1,12 @@
 <template>
   <div>
-    <nav class="bg-dark">
+    <nav class="bg-dark" :class="$route.name === 'home' ? 'cursor-none' : ''">
       <div class="max-w-screen flex flex-wrap items-center justify-between mx-auto p-4 ml-0">
-        <a href="/" class="w-80 flex items-center space-x-3 rtl:space-x-reverse">
-          <img src="@/assets/logo.svg" class="h-12" alt="Flowbite Logo" />
+        <a
+          @click="$router.push('/')"
+          class="w-80 flex items-center space-x-3 rtl:space-x-reverse z-10"
+        >
+          <img src="@/assets/logo.svg" class="h-12" alt="Discord Bot Maker Logo" />
           <span
             class="logo-text self-center text-2xl font-black whitespace-nowrap text-white duration-500"
           >
@@ -13,12 +16,21 @@
           </span>
         </a>
         <div class="w-80 justify-end flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <button
-            type="button"
-            class="text-dark font-black bg-primary duration-300 hover:bg-white hover:rounded-xl rounded-lg text-lg px-20 py-2 text-center"
+          <div
+            class="flex gap-6 duration-300 hover:bg-dark-grey hover:rounded-xl rounded-lg text-lg px-4 py-2 cursor-pointer text-center z-10"
+            v-if="login"
           >
-            LOGIN
-          </button>
+            <img src="@/assets/alt-logo.png" class="rounded-full" width="48" height="48" />
+            <button type="button" class="px-2 font-black text-white">USERNAME</button>
+          </div>
+          <div v-else>
+            <button
+              type="button"
+              class="text-dark font-black bg-primary duration-300 hover:bg-white hover:rounded-xl rounded-lg text-lg px-20 py-2 text-center z-10"
+            >
+              LOGIN
+            </button>
+          </div>
         </div>
         <div
           class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
@@ -28,22 +40,30 @@
             class="flex gap-4 flex-col font-medium p-4 md:p-0 mt-4 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
           >
             <li>
-              <a href="#" class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
+              <a
+                @click="$router.push('/')"
+                class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
                 >GITHUB</a
               >
             </li>
             <li>
-              <a href="#" class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
+              <a
+                @click="$router.push('/')"
+                class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
                 >SUPPORT</a
               >
             </li>
             <li>
-              <a href="#" class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
+              <a
+                @click="$router.push('/')"
+                class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
                 >DASHBOARD</a
               >
             </li>
             <li>
-              <a href="#" class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
+              <a
+                @click="$router.push('/')"
+                class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
                 >ABOUT</a
               >
             </li>
@@ -114,4 +134,8 @@
   }
 }
 </style>
-<script setup lang="ts"></script>
+<script lang="ts">
+export default {
+  props: ['login']
+}
+</script>

@@ -5,6 +5,8 @@ import DashboardHomeView from '@/views/Dashboard/DashboardHomeView.vue'
 import DashboardViewFocused from '@/views/DashboardViewFocused.vue'
 import DashboardModulesView from '@/views/Dashboard/DashboardModulesView.vue'
 import DashboardSettingsView from '@/views/Dashboard/DashboardSettingsView.vue'
+import LoginView from '@/views/LoginView.vue'
+import LoginCallBack from '@/callback/LoginCallBack.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,14 +17,30 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/login',
+      name: 'login',
+      component: LoginView
+    },
+    {
+      path: '/login/callback',
+      name: 'loginCallBack',
+      component: LoginCallBack
+    },
+    {
       path: '/dashboard',
       name: 'dashboard',
-      component: DashboardView
+      component: DashboardView,
+      meta: {
+        login: true
+      }
     },
     {
       path: '/dashboard/:id',
       name: 'dashboard-focused',
       component: DashboardViewFocused,
+      meta: {
+        login: true
+      },
       children: [
         {
           path: '',
@@ -47,6 +65,21 @@ const router = createRouter({
       ]
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (to?.meta?.login) {
+    const access_token = localStorage.getItem('access_token')
+
+    if (!access_token) next({ name: 'login' })
+
+    const auth = true
+
+    if (!auth) next({ name: 'login' })
+
+    next()
+  }
+  next()
 })
 
 export default router

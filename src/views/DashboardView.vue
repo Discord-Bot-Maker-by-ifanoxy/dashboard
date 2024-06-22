@@ -4,7 +4,6 @@ import Sidbar from '@/components/Sidbar/Sidbar.vue'
 </script>
 
 <template>
-  <Navbar />
   <div class="flex center flex-grow">
     <Sidbar />
   </div>
