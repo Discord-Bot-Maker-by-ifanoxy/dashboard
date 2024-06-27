@@ -14,7 +14,6 @@ import { API } from '@/script/api'
 export default {
   async beforeMount() {
     this.bots = (await API.bot.get()).data ?? []
-    console.log(this.bots)
   },
   data() {
     return {

@@ -1,60 +1,61 @@
-<script setup lang="ts">
-import Sidbar from '@/components/Sidbar/Sidbar.vue'
-</script>
-
 <template>
   <div class="flex flex-grow">
-    <Sidbar />
-    <div class="flex m-12 justify-center flex-grow">
-      <div
-        class="bg-dark-grey flex items-center text-lg p-10 gap-6 flex flex-col rounded-xl text-white"
-      >
-        <h1 class="text-center text-4xl font-black">CREATE A BOT</h1>
-        <h1
-          :class="{ shake: disabled && !name, ['text-red-500']: disabled && !name }"
-          class="duration-700"
-        >
-          Bot Name
-        </h1>
-        <input
-          class="bg-dark rounded-md p-3 text-xl border-none focus:border-0 focus:ring-primary outline-none w-full"
-          type="text"
-          maxlength="64"
-          :value="name"
-          @input="(x) => (name = x.target.value)"
-        />
-        <h1
-          :class="{ shake: disabled && !previewImage, ['text-red-500']: disabled && !previewImage }"
-          class="duration-700"
-        >
-          Bot Avatar
-        </h1>
-        <label
-          for="avatar"
-          class="flex aspect-square max-w-32 sm:max-w-48 lg:max-w-64 2xl:max-w-80"
-        >
-          <img v-if="previewImage" :src="previewImage" class="w-full object-cover rounded-full" />
-          <img
-            v-else
-            src="@/assets/plus.png"
-            class="w-full p-10 rounded-full cursor-pointer border-[10px] border-dark border-dashed hover:border-primary duration-700"
-          />
-        </label>
-        <input
-          id="avatar"
-          name="avatar"
-          type="file"
-          maxlength="16000000"
-          class="invisible"
-          accept="image/png"
-          @change="uploadImage"
-        />
+    <Sidbar :bots="bots" />
+    <div class="flex flex-grow">
+      <div class="flex m-12 justify-center flex-grow">
         <div
-          @click="createBot"
-          :class="disabled ? 'bg-red-500 hover:bg-red-500 shake' : ''"
-          class="bg-grey rounded-md p-5 mt-auto w-full text-center font-black cursor-pointer hover:bg-primary hover:text-dark duration-500"
+          class="bg-dark-grey flex items-center text-lg p-10 gap-6 flex flex-col rounded-xl text-white"
         >
-          CREATE
+          <h1 class="text-center text-4xl font-black">CREATE A BOT</h1>
+          <h1
+            :class="{ shake: disabled && !name, ['text-red-500']: disabled && !name }"
+            class="duration-700"
+          >
+            Bot Name
+          </h1>
+          <input
+            class="bg-dark rounded-md p-3 text-xl border-none focus:border-0 focus:ring-primary outline-none w-full"
+            type="text"
+            maxlength="64"
+            :value="name"
+            @input="(x) => (name = x.target.value)"
+          />
+          <h1
+            :class="{
+              shake: disabled && !previewImage,
+              ['text-red-500']: disabled && !previewImage
+            }"
+            class="duration-700"
+          >
+            Bot Avatar
+          </h1>
+          <label
+            for="avatar"
+            class="flex aspect-square max-w-32 sm:max-w-48 lg:max-w-64 2xl:max-w-80"
+          >
+            <img v-if="previewImage" :src="previewImage" class="w-full object-cover rounded-full" />
+            <img
+              v-else
+              src="@/assets/plus.png"
+              class="w-full p-10 rounded-full cursor-pointer border-[10px] border-dark border-dashed hover:border-primary duration-700"
+            />
+          </label>
+          <input
+            id="avatar"
+            name="avatar"
+            type="file"
+            maxlength="16000000"
+            class="invisible"
+            accept="image/png"
+            @change="uploadImage"
+          />
+          <div
+            @click="createBot"
+            :class="disabled ? 'bg-red-500 hover:bg-red-500 shake' : ''"
+            class="bg-grey rounded-md p-5 mt-auto w-full text-center font-black cursor-pointer hover:bg-primary hover:text-dark duration-500"
+          >
+            CREATE
+          </div>
         </div>
       </div>
     </div>
@@ -63,10 +64,16 @@ import Sidbar from '@/components/Sidbar/Sidbar.vue'
 
 <script lang="ts">
 import { API } from '@/script/api'
+import Sidbar from '@/components/Sidbar/Sidbar.vue'
 
 export default {
+  components: { Sidbar },
+  async beforeMount() {
+    this.bots = (await API.bot.get()).data ?? []
+  },
   data() {
     return {
+      bots: null,
       disabled: false,
       name: null,
       previewImage: null
@@ -87,9 +94,9 @@ export default {
         return
       }
 
-      const result = await API.bot.create(this.name, this.previewImage)
+      const result = await API.bot.create(this.name, this.previewImage).catch(() => {})
 
-      if (result.status === 500) return alert('You already have a bot with this name !')
+      if (!result || result.status === 400) return alert('You already have a bot with this name !')
 
       this.$router.push(`/dashboard/${this.name}`)
     },

@@ -33,7 +33,7 @@
           </button>
         </div>
       </div>
-      <div class="flex justify-center w-full">
+      <div class="flex gap-6 flex-col justify-center w-full">
         <img class="inset-0 object-contain max-w-2xl md:px-16" src="@/assets/logo.png" />
       </div>
     </div>
@@ -50,7 +50,11 @@ export default defineComponent({
     return {
       text: '',
       animationEnd: true,
-      firstAnimation: false
+      firstAnimation: false,
+      stats: {
+        bot_created: 10,
+        modules_count: 9
+      }
     }
   },
   mounted() {

@@ -5,22 +5,22 @@ import { API } from '@/script/api'
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
   components: { Title },
+  emits: ['moduleUpdate'],
   async beforeMount() {
     this.loaded = false
-    this.modules = ((await API.modules.get().catch(() => {}))?.data ?? []).map((x) => ({
-      ...x,
-      image_url: 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg'
-    }))
+    this.modules = (await API.modules.get(null, this.$route.params.id).catch(() => {}))?.data ?? []
     this.filteredModules = [...this.modules]
+    this.tags = this.tags.concat([...new Set(this.modules.map((x) => x.tags).flat())])
     this.loaded = true
   },
   data() {
     return {
       loaded: false,
+      cooldown: false,
       searchValue: '',
       filteredModules: [],
       modules: [],
-      tags: ['Installed', 'Favorites', 'Moderation', 'Administration', 'Fun', 'Games'],
+      tags: ['Installed', 'Favorites'],
       selected_tags: []
     }
   },
@@ -35,8 +35,45 @@ export default {
     },
     changeTag() {
       this.filteredModules = this.modules.filter((x) =>
-        this.selected_tags.every((y) => x.tags.includes(y))
+        this.selected_tags.every(
+          (y) =>
+            x.tags.includes(y) ||
+            (y === 'Installed' && x.downloaded) ||
+            (y === 'Favorites' && x.favorite)
+        )
       )
+    },
+    async addFavorite(module) {
+      const r = await API.modules.favorite.add(module.module_id, this.$route?.params?.id)
+      if (r.status === 200) module.favorite = true
+      module.stars += 1
+    },
+    async removeFavorite(module) {
+      const r = await API.modules.favorite.remove(module.module_id, this.$route?.params?.id)
+      if (r.status === 200) module.favorite = false
+      module.stars -= 1
+    },
+    async addBot(module_id: number) {
+      this.cooldown = true
+      await API.modules.add(module_id, this.$route?.params?.id)
+      const m = this.modules.find((x) => x.module_id == module_id)
+      if (m) {
+        m.downloaded = true
+        m.downloads += 1
+      }
+      this.$emit('moduleUpdate')
+      setTimeout(() => (this.cooldown = false), 500)
+    },
+    async removeBot(module_id: number) {
+      this.cooldown = true
+      await API.modules.remove(module_id, this.$route?.params?.id)
+      const m = this.modules.find((x) => x.module_id == module_id)
+      if (m) {
+        m.downloaded = false
+        m.downloads -= 1
+      }
+      this.$emit('moduleUpdate')
+      setTimeout(() => (this.cooldown = false), 500)
     }
   }
 }
@@ -108,10 +145,43 @@ export default {
       <div class="flex flex-col w-full h-96 gap-4">
         <div v-for="index of Array(Math.ceil(filteredModules.length / 3)).keys()" :key="index">
           <div class="flex w-full gap-4">
-            <div v-for="mod of filteredModules.slice(index * 3, 3 + index * 3)" :key="mod">
-              <div class="px-10 flex gap-2 flex-col items-stretch max-w-lg bg-dark p-4 rounded-lg">
-                <p class="text-xl text-center">{{ mod.name }}</p>
-                <img :src="mod.image_url" class="rounded-lg" alt="Module image" />
+            <div
+              class="flex"
+              v-for="mod of filteredModules.slice(index * 3, 3 + index * 3)"
+              :key="mod"
+            >
+              <div class="px-10 grow flex gap-4 flex-col max-w-lg bg-dark p-4 rounded-lg">
+                <div class="flex w-full">
+                  <p class="text-xl flex-1 text-center">{{ mod.name }}</p>
+                  <div
+                    class="fav cursor-pointer mr-[-30px] hover:rotate-45 duration-300"
+                    @click="mod.favorite ? removeFavorite(mod) : addFavorite(mod)"
+                    :class="mod.favorite ? 'favorite hover:rotate-180 ' : ''"
+                  >
+                    <svg
+                      width="25"
+                      height="25"
+                      viewBox="0 0 26 25"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M24.5125 8.35017L18.1228 7.74289C17.5142 7.74289 17.0578 7.28742 16.9057 6.83196L14.4715 0.910928C14.0151 -0.303643 12.1894 -0.303643 11.733 0.910928L8.99456 6.98378C8.84242 7.43925 8.38601 7.74289 7.77747 7.89471L1.38772 8.35017C0.0184932 8.50199 -0.437917 10.172 0.474903 11.083L5.34328 15.334C5.79969 15.6376 5.95183 16.2449 5.79969 16.8522L4.27832 23.0768C3.97405 24.4432 5.34328 25.3542 6.56037 24.7469L12.0373 21.4068C12.4937 21.1032 13.1023 21.1032 13.5587 21.4068L19.0356 24.7469C20.2527 25.506 21.6219 24.4432 21.3176 23.0768L19.7963 16.8522C19.6441 16.2449 19.7963 15.7894 20.2527 15.334L25.1211 11.083C26.4903 10.172 25.8817 8.50199 24.5125 8.35017ZM12.9501 18.0667L7.16892 21.5586L8.69029 15.0303L3.66977 10.6275L10.3638 10.0202L12.9501 3.94735L15.5364 10.0202L22.2305 10.6275L17.2099 15.0303L18.7313 21.5586L12.9501 18.0667Z"
+                        fill="#F7A530"
+                      />
+                      <path
+                        class="stars duration-300"
+                        d="M12.9501 18.0667L7.16892 21.5586L8.69029 15.0303L3.66977 10.6275L10.3638 10.0202L12.9501 3.94735L15.5364 10.0202L22.2305 10.6275L17.2099 15.0303L18.7313 21.5586L12.9501 18.0667Z"
+                        fill="#F7A530"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <img
+                  :src="mod?.image_url ?? 'https://pbs.twimg.com/media/E1RnbS_VcAg4B5C.jpg'"
+                  class="rounded-lg"
+                  alt="Module image"
+                />
                 <div class="flex gap-3 text-xs w-full">
                   <div v-for="tag of mod.tags" :key="tag">
                     <div
@@ -163,16 +233,20 @@ export default {
                   </div>
                 </div>
 
-                <div class="w-full pt-6">
+                <div class="w-full mt-auto">
                   <div
-                    v-if="mod.tags.includes('INSTALLED')"
+                    @click="() => (cooldown ? null : removeBot(mod.module_id))"
+                    v-if="mod.downloaded"
+                    :class="{ ['cursor-not-allowed']: cooldown }"
                     class="p-3 mb-4 pt-4 cursor-pointer bg-red-400 text-dark rounded-md flex justify-center w-full hover:bg-red-600 duration-300 hover:text-white hover:font-normal"
                   >
                     REMOVE MODULE
                   </div>
                   <div
+                    @click="() => (cooldown ? null : addBot(mod.module_id))"
                     v-else
-                    class="add-module mb-4 p-3 pt-4 cursor-pointer bg-primary text-dark rounded-md flex justify-center w-full"
+                    :class="{ ['cursor-not-allowed']: cooldown }"
+                    class="add-module mb-4 p-3 pt-4 bg-primary cursor-pointer text-dark rounded-md flex justify-center w-full"
                   >
                     ADD MODULE
                   </div>
@@ -208,6 +282,23 @@ export default {
         fill: var(--primary);
       }
     }
+  }
+}
+
+.fav {
+  .stars {
+    fill: var(--grey);
+  }
+  &:hover {
+    .stars {
+      fill: #f7a530;
+    }
+  }
+}
+
+.favorite {
+  .stars {
+    fill: #f7a530;
   }
 }
 

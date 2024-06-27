@@ -45,33 +45,33 @@
           id="navbar-cta"
         >
           <ul
-            class="flex gap-4 flex-col font-medium p-4 md:p-0 mt-4 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
+            class="flex gap-4 flex-col items-center font-medium p-4 md:p-0 mt-4 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
           >
             <li>
               <a
                 @click="$router.push('/')"
-                class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
+                class="select-none block nav-items px-3 pt-0.5 font-normal text-lg text-white rounded"
                 >GITHUB</a
               >
             </li>
             <li>
               <a
-                @click="$router.push('/')"
-                class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
+                @click="$router.push('discord')"
+                class="select-none block nav-items px-3 pt-0.5 font-normal text-lg text-white rounded"
                 >SUPPORT</a
               >
             </li>
             <li>
               <a
                 @click="$router.push('/dashboard')"
-                class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
+                class="select-none block nav-items px-3 pt-0.5 font-normal text-lg text-white rounded"
                 >DASHBOARD</a
               >
             </li>
             <li>
               <a
                 @click="$router.push('/')"
-                class="block nav-items py-2 md:p-0 font-normal text-lg text-white rounded"
+                class="select-none block nav-items px-3 pt-0.5 font-normal text-lg text-white rounded"
                 >ABOUT</a
               >
             </li>
@@ -134,7 +134,6 @@
   border-radius: 5px;
   border-width: 2px;
   border-color: transparent;
-  padding: 4px 10px 0;
 
   &:hover {
     border-color: var(--primary);

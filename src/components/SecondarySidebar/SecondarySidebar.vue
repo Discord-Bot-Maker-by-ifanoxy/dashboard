@@ -2,18 +2,18 @@
 import { API } from '@/script/api'
 
 export default {
+  props: ['modules'],
   async beforeMount() {
-    const bot = (await API.bot.get(this.$route.params.id).catch(() => {}))?.data ?? []
-    if (bot.length === 0) return this.$router.push('/dashboard')
-    this.bot = bot[0]
+    const bot = (await API.bot.get(this.$route.params.id).catch(() => {}))?.data ?? null
+    if (!bot) return this.$router.push('/dashboard')
+    this.bot = bot
   },
   data() {
     return {
       bot: {
-        name: '',
+        name: this.$route.params.id,
         image: ''
-      },
-      modules: []
+      }
     }
   }
 }
@@ -35,7 +35,7 @@ export default {
         <li
           class="w-full cursor-pointer hover:opacity-100 hover:translate-x-1 duration-300 flex justify-center my-4 py-2 bg-dark rounded-lg"
           :class="$route.name == 'informations' ? 'opacity-100' : 'opacity-80'"
-          @click="$router.push(`/dashboard/${bot.name}`, null, { shallow: true })"
+          @click="$router.push(`/dashboard/${bot.name}`)"
         >
           INFORMATIONS
         </li>
@@ -48,10 +48,10 @@ export default {
         </li>
         <li
           class="w-full cursor-pointer hover:opacity-100 duration-300 hover:translate-x-1 flex justify-center my-4 py-2 bg-dark rounded-lg"
-          :class="$route.name == 'settings' ? 'opacity-100' : 'opacity-80'"
-          @click="$router.push(`/dashboard/${bot.name}/settings`)"
+          :class="$route.name == 'export' ? 'opacity-100' : 'opacity-80'"
+          @click="$router.push(`/dashboard/${bot.name}/export`)"
         >
-          SETTINGS
+          EXPORT
         </li>
       </ul>
     </div>
@@ -60,25 +60,33 @@ export default {
     </p>
     <hr class="w-full size-1.5 bg-dark rounded-full border-0" />
     <div class="modules-config w-full">
-      <ul class="w-full text-white font-extrabold">
-        <li
-          v-for="module of modules"
-          class="w-full cursor-pointer hover:opacity-100 duration-300 hover:translate-x-1 flex justify-center my-4 py-2 bg-dark rounded-lg"
-          @click="$router.push(`/dashboard/${bot_data.bot_id}/modules-config/${module.id}`)"
-          :class="
-            $route.name == 'modules-config' && $route.params?.module_id == module.id
-              ? 'opacity-100'
-              : 'opacity-80'
-          "
-        >
-          {{ module.name }}
-        </li>
+      <ul v-for="module of modules" class="w-full text-white font-extrabold">
+        <transition name="slide-fade" appear>
+          <li
+            class="w-full cursor-pointer hover:opacity-100 duration-300 hover:translate-x-1 flex justify-center my-4 py-2 bg-dark rounded-lg"
+            @click="$router.push(`/dashboard/${bot.name}/modules-config/${module.module_id}`)"
+            :class="$route.meta?.module_id == module.module_id ? 'opacity-100' : 'opacity-80'"
+          >
+            {{ module.name }}
+          </li>
+        </transition>
       </ul>
     </div>
   </div>
 </template>
 
 <style scoped>
-.secondary-sidebar {
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translatey(20px);
+  opacity: 0;
 }
 </style>
