@@ -5,7 +5,7 @@ export default {
   methods: {
     redirect() {
       window.location.href =
-        'https://discord.com/oauth2/authorize?client_id=1254021097825894480&response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Flogin%2Fcallback&scope=identify'
+        'https://discord.com/oauth2/authorize?client_id=1254021097825894480&response_type=code&redirect_uri=https%3A%2F%2Fphenomenal-biscuit-8c84fd.netlify.app%2Flogin%2Fcallback&scope=identify'
     }
   }
 }
