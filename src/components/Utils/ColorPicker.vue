@@ -108,6 +108,9 @@ export default {
       }
     }
   },
+  created() {
+    this.set_color(this.defineColor)
+  },
   watch: {
     hold(val) {
       this.$emit('set-color', this.color)
@@ -174,7 +177,7 @@ export default {
       const value = x.srcElement.value
       if (!value.startsWith('#')) return (x.srcElement.value = '#' + value)
       if (value.length !== 7) return
-      if (!Boolean(value.match(/[0-9a-f]+$/i))) return
+      if (!value.match(/[0-9a-f]+$/i)) return
       this.set_color(value)
     }
   }

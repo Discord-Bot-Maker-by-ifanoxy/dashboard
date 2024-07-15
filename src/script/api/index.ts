@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:1111/'
+const BASE_URL = 'http://154.51.39.69:20017/'
 
 const getAccess = () => localStorage.getItem('access_token')
 
@@ -31,6 +31,9 @@ async function post(path: string, data: any) {
 export const API = {
   async check() {
     return get('check')
+  },
+  async stats() {
+    return get('stats')
   },
   async exportBot(bot_name: string, database = {}, bot_token) {
     return get(

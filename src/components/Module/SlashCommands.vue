@@ -5,7 +5,7 @@ import { API } from '@/script/api'
 
 export default {
   components: { EmbedPopup, EmbedViewer },
-  props: ['commandsName', 'commandsData'],
+  props: ['commandsName', 'commandsData', 'bot'],
   data() {
     return {
       active: null,
@@ -22,14 +22,6 @@ export default {
         (x) => x.module_id === new_data.module_id && x.name === new_data.name
       )
       this.activeData[index2] = new_data
-
-      const index = this.commandsData.findIndex(
-        (x) =>
-          x.command_name === new_data.command_name &&
-          x.module_id === new_data.module_id &&
-          x.name === new_data.name
-      )
-      this.$props.commandsName[index] = new_data
 
       await API.modules.slash_commands.update(
         this.$route.params.id,

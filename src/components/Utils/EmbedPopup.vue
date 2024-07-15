@@ -8,7 +8,7 @@ export default {
   props: ['data', 'bot'],
   data() {
     return {
-      new_data: { ...this.data },
+      new_data: { ...this.$props.data },
       showColor: false
     }
   },
@@ -68,6 +68,7 @@ export default {
                 class="w-full"
                 :value="new_data?.author?.name"
                 :oninput="(x) => auto_grow(x)"
+                @click="(x) => auto_grow(x)"
                 @input="
                   (x) =>
                     new_data.author
@@ -90,6 +91,7 @@ export default {
                 class="w-full"
                 :value="new_data.title"
                 :oninput="(x) => auto_grow(x)"
+                @click="(x) => auto_grow(x)"
                 @input="(x) => (new_data.title = x.target.value)"
               />
             </div>
@@ -103,6 +105,7 @@ export default {
                 class="w-full"
                 :value="new_data.description"
                 :oninput="(x) => auto_grow(x)"
+                @click="(x) => auto_grow(x)"
                 @input="(x) => (new_data.description = x.target.value)"
               />
             </div>
@@ -110,14 +113,10 @@ export default {
             <div class="w-full flex flex-col gap-1">
               <div class="flex gap-3">
                 <p>COLOR</p>
-                <span
-                  @click="showColor = !showColor"
-                  class="material-symbols-outlined cursor-pointer hover:text-primary duration-300"
-                  >palette</span
-                >
+                <span class="material-symbols-outlined cursor-pointer">palette</span>
                 <ColorPicker
                   @setColor="(x) => (new_data.color = parseInt(x.slice(1), 16))"
-                  v-if="showColor"
+                  :define-color="'#' + new_data.color.toString(16)"
                 />
               </div>
             </div>
@@ -135,6 +134,7 @@ export default {
                 class="w-full"
                 :value="new_data?.footer?.text"
                 :oninput="(x) => auto_grow(x)"
+                @click="(x) => auto_grow(x)"
                 @input="
                   (x) =>
                     new_data.footer

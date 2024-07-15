@@ -25,6 +25,7 @@ export default {
     v-if="commandsData && commandsName"
     :commands-name="commandsName"
     :commands-data="commandsData"
+    :bot="bot"
   />
 </template>
 

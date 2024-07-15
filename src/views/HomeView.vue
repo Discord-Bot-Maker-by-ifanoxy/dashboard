@@ -35,6 +35,18 @@
       </div>
       <div class="flex gap-6 flex-col justify-center w-full">
         <img class="inset-0 object-contain max-w-2xl md:px-16" src="@/assets/logo.png" />
+        <div class="text-center flex flex-col gap-2 max-w-2xl md:px-16">
+          <div class="flex gap-2 justify-center">
+            <p class="font-normal">Over</p>
+            <span>{{ stats.bot_count }}</span>
+            <p class="font-normal">bots was created</p>
+          </div>
+          <div class="flex gap-2 justify-center">
+            <p class="font-normal">With</p>
+            <span>{{ stats.modules_count }}</span>
+            <p class="font-normal">updated modules</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -42,18 +54,21 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import Navbar from '@/components/Navbar.vue'
 import gsap from 'gsap'
+import { API } from '@/script/api'
 
 export default defineComponent({
+  async created() {
+    this.stats = (await API.stats())?.data ?? null
+  },
   data() {
     return {
       text: '',
       animationEnd: true,
       firstAnimation: false,
       stats: {
-        bot_created: 10,
-        modules_count: 9
+        bot_count: 0,
+        modules_count: 0
       }
     }
   },
