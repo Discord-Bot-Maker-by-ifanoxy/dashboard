@@ -49,7 +49,8 @@
           >
             <li>
               <a
-                @click="$router.push('/')"
+                href="https://github.com/Discord-Bot-Maker-by-ifanoxy"
+                target="_blank"
                 class="select-none block nav-items px-3 pt-0.5 font-normal text-lg text-white rounded"
                 >GITHUB</a
               >
