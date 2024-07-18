@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://154.51.39.69:20017/'
+const BASE_URL = 'https://api.discordbotmaker.fr/'
 
 const getAccess = () => localStorage.getItem('access_token')
 
