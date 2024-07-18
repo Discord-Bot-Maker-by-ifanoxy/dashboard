@@ -34,7 +34,17 @@ export default {
   },
   data() {
     return {
-      user: null
+      user: null,
+      access_token: localStorage.getItem('access_token')
+    }
+  },
+  watch: {
+    async $route(to, from) {
+      if (this.access_token !== localStorage.getItem('access_token')) {
+        this.access_token = localStorage.getItem('access_token')
+        const res = await API.check(this.access_token)
+        if (res.status === 200) this.user = res.data
+      }
     }
   }
 }

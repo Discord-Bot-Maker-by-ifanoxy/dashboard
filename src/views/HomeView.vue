@@ -58,7 +58,7 @@ import gsap from 'gsap'
 import { API } from '@/script/api'
 
 export default defineComponent({
-  async created() {
+  async beforeCreate() {
     this.stats = (await API.stats())?.data ?? null
   },
   data() {
