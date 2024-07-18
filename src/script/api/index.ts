@@ -70,10 +70,10 @@ export const API = {
       return get(`modules/get?bot_name=${bot_name}&only_downloaded=true`)
     },
     async add(module_id: number, bot_name: string) {
-      return put(`modules/add/${module_id}`, { bot_name: bot_name })
+      return put(`modules/add/${module_id}?bot_name=${bot_name}`, { bot_name: bot_name })
     },
     async remove(module_id: number, bot_name: string) {
-      return put(`modules/remove/${module_id}`, { bot_name: bot_name })
+      return put(`modules/remove/${module_id}?bot_name=${bot_name}`, { bot_name: bot_name })
     },
     favorite: {
       async add(module_id: number, bot_name: string) {
