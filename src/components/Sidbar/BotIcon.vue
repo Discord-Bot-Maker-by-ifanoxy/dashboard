@@ -11,7 +11,7 @@ export default {
   >
     <img
       :src="image_url"
-      class="rounded-full m-2 border-2 border-dark"
+      class="rounded-full m-2 border-2 bg-dark border-dark aspect-square"
       width="48px"
       height="48px"
       :alt="'Picture profile'"

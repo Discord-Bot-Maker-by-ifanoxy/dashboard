@@ -21,7 +21,12 @@ export default {
 <template>
   <div class="secondary-sidebar flex-col gap-2 items-center p-4 flex w-80 bg-primary rounded-xl">
     <div class="avatar">
-      <img class="rounded-full w-28 h-28 border-dark border-[4px]" :src="bot.image" />
+      <img
+        v-if="bot?.image"
+        class="rounded-full bg-dark w-28 h-28 border-dark border-[4px]"
+        :src="bot?.image"
+      />
+      <div v-else class="rounded-full bg-dark w-28 h-28 border-dark border-[4px]" />
     </div>
     <p
       class="w-full text-center font-black h-max"

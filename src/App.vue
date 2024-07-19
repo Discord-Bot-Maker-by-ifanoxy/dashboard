@@ -6,9 +6,9 @@ import Navbar from '@/components/Navbar.vue'
 <template>
   <div class="max-h-screen h-screen dashboard flex flex-col bg-grey">
     <navbar :user="user" />
-    <RouterView v-slot="{ Component, route }">
+    <RouterView v-slot="{ Component }">
       <transition>
-        <div class="flex flex-col flex-grow component-wrapper" :key="route.path">
+        <div class="flex flex-col flex-grow component-wrapper">
           <component :is="Component" />
         </div>
       </transition>

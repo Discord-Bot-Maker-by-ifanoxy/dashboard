@@ -3,12 +3,14 @@ import BotRaw from '@/components/Sidbar/BotRaw.vue'
 import Opener from '@/components/Sidbar/Opener.vue'
 import BotIcon from '@/components/Sidbar/BotIcon.vue'
 import { computed } from 'vue'
+import { API } from '@/script/api'
 
 export default {
-  props: ['bots'],
   components: { BotIcon, Opener, BotRaw },
   async beforeMount() {},
-  created() {
+  async beforeCreate() {
+    console.log('oakzpzdkipazod')
+    this.bots = (await API.bot.get()).data ?? []
     this.opened = localStorage.getItem('sidebar-opened') == 'true'
     window.addEventListener('resize', () => {
       if (window.innerWidth <= 1280) this.opened = false
@@ -16,6 +18,7 @@ export default {
   },
   data() {
     return {
+      bots: [],
       opened: localStorage.getItem('sidebar-opened') == 'true'
     }
   },
