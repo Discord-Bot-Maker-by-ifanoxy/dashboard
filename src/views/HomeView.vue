@@ -1,19 +1,21 @@
 <template>
-  <div class="cursor" ref="cursor"></div>
-  <div class="cursor-follower" ref="follower"></div>
-  <div class="flex flex-grow flex-col w-full items-center cursor-none justify-center">
+  <div v-if="!isMobile()">
+    <div class="cursor" ref="cursor"></div>
+    <div class="cursor-follower" ref="follower"></div>
+  </div>
+  <div class="flex flex-grow flex-row md:flex-col w-full items-center cursor-none justify-center">
     <div
-      class="hero sm:flex-col xl:flex-row flex text-white items-center justify-center w-full font-black uppercase"
+      class="hero flex-col md:flex-row flex text-white items-center justify-center w-full font-black uppercase"
     >
       <div
-        class="h-60 gap-6 sm:pt-10 select-none flex-col md:gap-20 flex text-7xl w-full justify-center items-center"
+        class="h-60 gap-3 sm:pt-10 select-none flex-col md:gap-20 flex text-7xl w-full justify-center items-center"
       >
         <div class="h-20 flex box justify-center items-center w-full" ref="box">
           <Transition name="fade">
             <div class="flex w-full items-center justify-center relative" v-show="animationEnd">
               <h3
                 v-on:mouseover="startAnimation"
-                class="select-none text-center animation-text sm:text-xl 2xl:text-7xl xl:text-6xl lg:text-5xl md:text-3xl"
+                class="select-none text-center animation-text text-2xl 2xl:text-7xl xl:text-6xl lg:text-5xl md:text-3xl"
               >
                 Discord Bot Maker
               </h3>
@@ -27,14 +29,14 @@
           <button
             @click="$router.push('/dashboard')"
             type="button"
-            class="z-10 text-dark xl:text-2xl md:text-lg md:px-10 md:py-3 font-black bg-primary duration-300 hover:bg-white hover:rounded-xl rounded-lg text-lg px-20 py-5 pt-6 text-center"
+            class="z-10 text-dark xl:text-2xl md:text-lg md:px-10 md:py-3 font-black bg-primary duration-300 hover:bg-white hover:rounded-xl rounded-lg text-lg px-10 py-2 pt-2.5 lg:px-20 lg:py-5 lg:pt-6 text-center"
           >
             CREATE YOUR BOT
           </button>
         </div>
       </div>
-      <div class="flex gap-6 flex-col justify-center w-full">
-        <img class="inset-0 object-contain max-w-2xl md:px-16" src="@/assets/logo.png" />
+      <div class="flex gap-3 md:gap-6 flex-col justify-center w-full">
+        <img class="inset-0 object-contain px-12 md:px-16" src="@/assets/logo.png" />
         <div class="text-center flex flex-col gap-2 max-w-2xl md:px-16">
           <div class="flex gap-2 justify-center">
             <p class="font-normal">Over</p>
@@ -77,6 +79,13 @@ export default defineComponent({
     this.cursor()
   },
   methods: {
+    isMobile() {
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true
+      } else {
+        return false
+      }
+    },
     cursor() {
       const { cursor, follower } = this.$refs
 
@@ -175,7 +184,7 @@ export default defineComponent({
         word = words[i]
         isSentenceEnd = /(\.|\?|!)$/g.test(word)
         element = document.createElement('h3')
-        element.className += 'animation-text'
+        element.className += 'animation-text select-none text-center animation-text text-2xl 2xl:text-7xl xl:text-6xl lg:text-5xl md:text-3xl'
         element.textContent = word
         box.append(element)
         duration = Math.max(0.55, word.length * 0.08)

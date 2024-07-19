@@ -4,10 +4,11 @@
       <div class="max-w-screen flex flex-wrap items-center justify-between mx-auto p-4 ml-0">
         <a
           @click="$router.push('/')"
-          class="w-80 flex items-center space-x-3 rtl:space-x-reverse z-10"
+          class="sm!w-50 md:w-80 flex items-center space-x-3 rtl:space-x-reverse z-10"
         >
           <img src="@/assets/logo.svg" class="h-12" alt="Discord Bot Maker Logo" />
           <span
+              v-if="!isMobile()"
             class="logo-text self-center text-2xl font-black whitespace-nowrap text-white duration-500"
           >
             <span>D</span><span>I</span><span>S</span><span>C</span><span>O</span><span>R</span
@@ -15,7 +16,7 @@
             ><span>A</span><span>K</span><span>E</span><span>R</span>
           </span>
         </a>
-        <div class="w-80 justify-end flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+        <div class="md:w-80 justify-center md:justify-end flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
           <div
             class="flex gap-6 duration-300 hover:bg-dark-grey hover:rounded-xl rounded-lg text-lg px-4 py-2 cursor-pointer text-center z-10"
             v-if="user"
@@ -145,6 +146,16 @@
 </style>
 <script lang="ts">
 export default {
-  props: ['user']
+  props: ['user'],
+  methods: {
+
+    isMobile() {
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true
+      } else {
+        return false
+      }
+    },
+  }
 }
 </script>

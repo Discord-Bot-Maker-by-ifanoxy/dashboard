@@ -13,7 +13,7 @@ export default {
 
 <template>
   <div class="flex items-center justify-center flex-grow">
-    <div class="bg-dark-grey text-lg p-10 gap-6 flex flex-col rounded-xl text-white">
+    <div class="md:bg-dark-grey text-lg p-10 gap-6 flex flex-col rounded-xl text-white">
       <h1 class="text-center text-4xl font-black">LOGIN</h1>
       <div
         @click="redirect()"
