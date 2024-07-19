@@ -55,7 +55,6 @@ export default {
     },
     async addBot(module_id: number) {
       this.cooldown = true
-      console.log(this.$route.params)
       await API.modules.add(module_id, this.$route?.params?.id)
       const m = this.modules.find((x) => x.module_id == module_id)
       if (m) {

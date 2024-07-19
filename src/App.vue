@@ -28,21 +28,22 @@ export default {
       }
     }
   },
-  async beforeMount() {
-    const res = await API.check(localStorage.getItem('access_token'))
-    if (res.status === 200) this.user = res.data
+  async mounted() {
+    const access_token = localStorage.getItem('access_token')
+    if (access_token) {
+      const res = await API.check()
+      if (res.status === 200) this.user = res.data
+    }
   },
   data() {
     return {
-      user: null,
-      access_token: localStorage.getItem('access_token')
+      user: null
     }
   },
   watch: {
-    async $route(to, from) {
-      if (this.access_token !== localStorage.getItem('access_token')) {
-        this.access_token = localStorage.getItem('access_token')
-        const res = await API.check(this.access_token)
+    async $route(a, b) {
+      if (b.path === '/login/callback') {
+        const res = await API.check()
         if (res.status === 200) this.user = res.data
       }
     }
