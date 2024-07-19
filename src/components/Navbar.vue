@@ -19,6 +19,7 @@
           <div
             class="flex gap-6 duration-300 hover:bg-dark-grey hover:rounded-xl rounded-lg text-lg px-4 py-2 cursor-pointer text-center z-10"
             v-if="user"
+            @click="$router.push('/settings')"
           >
             <img
               :src="`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`"

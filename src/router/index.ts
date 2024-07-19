@@ -13,6 +13,7 @@ import DashboardModulesConfigView from '@/views/Dashboard/DashboardModulesConfig
 import Basic_Moderation from '@/views/Dashboard/Modules/Basic_Moderation.vue'
 import NotFound from '@/views/NotFound.vue'
 import Presence from '@/views/Dashboard/Modules/Presence.vue'
+import SettingsView from '@/views/SettingsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,14 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingsView,
+      meta: {
+        login: true
+      }
     },
     {
       path: '/login/callback',

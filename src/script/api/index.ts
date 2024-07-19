@@ -4,13 +4,16 @@ const BASE_URL = 'https://api.discordbotmaker.fr/'
 
 const getAccess = () => localStorage.getItem('access_token')
 
-async function get(path: string, config = null) {
-  return await axios.get(BASE_URL + path, {
-    headers: {
-      Authorization: `Bearer ${getAccess()}`
-    },
-    ...config
-  })
+async function get(path: string, config = null, authNeeded = true) {
+  const auth = getAccess()
+  if ((auth && auth !== 'null') || !authNeeded)
+    return await axios.get(BASE_URL + path, {
+      headers: {
+        Authorization: `Bearer ${auth}`
+      },
+      ...config
+    })
+  else return { status: 400 }
 }
 async function put(path: string, data: any) {
   return await axios.put(BASE_URL + path, data, {
@@ -33,7 +36,7 @@ export const API = {
     return get('check')
   },
   async stats() {
-    return get('stats')
+    return get('stats', null, false)
   },
   async exportBot(bot_name: string, database = {}, bot_token) {
     return get(

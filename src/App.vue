@@ -18,6 +18,7 @@ import Navbar from '@/components/Navbar.vue'
 
 <script lang="ts">
 import { API } from '@/script/api'
+import { watch } from 'vue'
 
 export default {
   name: 'app',
@@ -42,9 +43,13 @@ export default {
   },
   watch: {
     async $route(a, b) {
+      console.log(a.path, b.path)
       if (b.path === '/login/callback') {
         const res = await API.check()
         if (res.status === 200) this.user = res.data
+      }
+      if (b.path === '/settings') {
+        this.user = null
       }
     }
   }
