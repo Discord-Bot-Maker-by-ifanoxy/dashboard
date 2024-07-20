@@ -13,6 +13,13 @@ export default {
     }
   },
   methods: {
+    isMobile() {
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true
+      } else {
+        return false
+      }
+    },
     formatDiscordDate(date) {
       const now = new Date()
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -53,7 +60,7 @@ export default {
           <p class="">EDIT EMBED</p>
           <pre>{{ data.name }}</pre>
         </div>
-        <div class="flex grow gap-6">
+        <div class="flex grow gap-6 flex-col md:flex-row">
           <div class="flex flex-col gap-5 w-full flex-1">
             <div class="w-full flex flex-col gap-1">
               <div class="flex gap-3">
@@ -114,11 +121,11 @@ export default {
               <div class="flex gap-3">
                 <p>COLOR</p>
                 <span class="material-symbols-outlined cursor-pointer">palette</span>
-                <ColorPicker
+              </div>
+              <ColorPicker
                   @setColor="(x) => (new_data.color = parseInt(x.slice(1), 16))"
                   :define-color="'#' + new_data.color.toString(16)"
-                />
-              </div>
+              />
             </div>
 
             <div class="w-full flex flex-col gap-1">
@@ -168,7 +175,7 @@ export default {
             <div class="flex gap-2 flex-col">
               <div class="flex gap-2 mt-2 items-center">
                 <p class="">{{ bot.name }}</p>
-                <span class="text-[11px] pt-1 text-white">{{ formatDiscordDate(new Date()) }}</span>
+                <span v-if="!isMobile()" class="text-[11px] pt-1 text-white">{{ formatDiscordDate(new Date()) }}</span>
               </div>
               <EmbedViewer :data="new_data" />
             </div>
@@ -177,13 +184,13 @@ export default {
         <div class="flex gap-6 mt-auto font-black">
           <button
             @click="$emit('close')"
-            class="mr-auto bg-red-500 px-12 py-3 rounded-md duration-300 hover:text-dark hover:bg-white"
+            class="mr-auto bg-red-500 px-8 md:px-12 py-3 rounded-md duration-300 hover:text-dark hover:bg-white"
           >
             CANCEL
           </button>
           <button
             @click="$emit('save_data', this.new_data)"
-            class="ml-auto bg-primary px-12 py-3 rounded-md text-dark duration-300 hover:bg-white"
+            class="ml-auto bg-primary px-8 md:px-12 py-3 rounded-md text-dark duration-300 hover:bg-white"
           >
             SAVE
           </button>

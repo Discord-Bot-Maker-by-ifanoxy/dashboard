@@ -10,7 +10,7 @@ import SecondarySidebar from '@/components/SecondarySidebar/SecondarySidebar.vue
     </keep-alive>
     <div
       :key="$route.params.id"
-      class="px-8 py-6 max-h-[calc(100vh-100px)] flex-col sm:flex-row overflow-y-hidden flex gap-6 flex-1"
+      class="px-8 py-6 max-h-[calc(100vh-100px)] flex-col sm:flex-row overflow-y-scroll flex gap-6 flex-1"
     >
       <SecondarySidebar :modules="actives_module" v-show="$route.params.id" />
       <router-view

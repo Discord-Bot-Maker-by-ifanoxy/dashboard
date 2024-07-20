@@ -22,7 +22,7 @@ export default {
     <img
       v-if="image_url"
       :src="image_url"
-      class="rounded-full ml-4 my-2 border-2 border-dark"
+      class="rounded-full ml-4 my-2 border-2 border-dark aspect-square"
       width="48px"
       height="48px"
       :alt="'Picture profile of ' + name"

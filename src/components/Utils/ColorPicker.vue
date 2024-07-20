@@ -237,6 +237,7 @@ export default {
       <div
         v-if="hold"
         v-on:mousemove="getCoords"
+        v-on:click="getCoord"
         v-on:mouseup="hold = false"
         style="position: fixed; width: 100%; height: 100%; top: 0; left: 0"
       ></div>
@@ -256,8 +257,6 @@ export default {
   z-index: 100;
 
   padding: 15px;
-  width: 20vw;
-  max-width: 270px;
   height: fit-content;
   background-color: #36393f;
   box-shadow:

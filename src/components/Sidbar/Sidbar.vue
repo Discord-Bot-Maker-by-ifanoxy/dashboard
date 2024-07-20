@@ -9,12 +9,13 @@ export default {
   components: { BotIcon, Opener, BotRaw },
   async beforeMount() {},
   async beforeCreate() {
-    console.log('oakzpzdkipazod')
     this.bots = (await API.bot.get()).data ?? []
     this.opened = localStorage.getItem('sidebar-opened') == 'true'
     window.addEventListener('resize', () => {
-      if (window.innerWidth <= 1280) this.opened = false
-    })
+      if (window.innerWidth <= 1280 && !this.isMobile()) this.opened = false
+    });
+
+    console.log(this.opened)
   },
   data() {
     return {
@@ -27,19 +28,26 @@ export default {
     changeOpened: function () {
       this.opened = !this.opened
       localStorage.setItem('sidebar-opened', this.opened)
-    }
+    },
+    isMobile() {
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true
+      } else {
+        return false
+      }
+    },
   }
 }
 </script>
 
 <template>
   <keep-alive>
-    <div class="sidebar p-5 bg-dark-grey duration-300" :class="opened ? 'w-96' : 'w-28'">
+    <div v-if="!(isMobile() && !opened)" class="sidebar p-5 bg-dark-grey duration-300" :class="opened ? (isMobile() ? 'w-full absolute z-20 ' : 'w-96') : 'w-28'">
       <div v-if="opened">
         <div class="open flex flex-col gap-6">
           <div v-for="bot of bots">
             <BotRaw
-              @click="$router.push(`/dashboard/${bot.name}`)"
+              @click="() => {$router.push(`/dashboard/${bot.name}`); if (isMobile())changeOpened()}"
               :name="bot.name"
               :id="bot.bot_id"
               :image_url="bot.image"
@@ -67,7 +75,7 @@ export default {
           <div v-for="bot of bots">
             <div class="flex justify-center items-center">
               <BotIcon
-                @click="$router.push(`/dashboard/${bot.name}`)"
+                  @click="() => {$router.push(`/dashboard/${bot.name}`); if (isMobile())changeOpened()}"
                 :id="bot.name"
                 :image_url="bot.image"
               />
@@ -92,7 +100,7 @@ export default {
           </div>
         </div>
       </div>
-      <Opener class="invisible xl:visible" :opened="opened" @onClick="changeOpened" />
+      <Opener v-if="!isMobile()" class="invisible xl:visible" :opened="opened" @onClick="changeOpened" />
     </div>
   </keep-alive>
 </template>

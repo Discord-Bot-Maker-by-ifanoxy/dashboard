@@ -33,7 +33,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6 p-5 scroll-bar text-white font-black overflow-y-scroll">
+  <div class="flex flex-col gap-6 p-5 scroll-bar text-white font-black">
     <Title name="EXPORT" />
     <div class="flex flex-col gap-4">
       <p class="font-normal">

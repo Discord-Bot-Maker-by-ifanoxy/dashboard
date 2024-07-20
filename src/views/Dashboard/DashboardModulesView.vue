@@ -144,9 +144,9 @@ export default {
     <div v-if="loaded" class="modules flex flex-grow h-3/4 overflow-y-auto rounded-lg">
       <div class="flex flex-col w-full h-96 gap-4">
         <div v-for="index of Array(Math.ceil(filteredModules.length / 3)).keys()" :key="index">
-          <div class="flex w-full gap-4">
+          <div class="flex w-full gap-4 flex-wrap">
             <div
-              class="flex"
+              class="flex min-w-56"
               v-for="mod of filteredModules.slice(index * 3, 3 + index * 3)"
               :key="mod"
             >

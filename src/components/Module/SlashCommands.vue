@@ -48,14 +48,16 @@ export default {
 
 <template>
   <div class="flex flex-col gap-6" v-for="commandName of commandsName" :key="commandName">
-    <div class="p-2 text-xl flex gap-2 bg-dark items-center rounded-md border-l-primary border-l-8">
-      <span
-        @click="
+    <div class="p-2 text-xl flex gap-2 bg-dark items-center rounded-md border-l-primary border-l-8"
+
+         @click="
           () =>
             active === commandName
               ? ((active = null), (activeData = null))
               : ((active = commandName), (activeData = getCommand(commandName)))
         "
+    >
+      <span
         :class="active === commandName ? 'rotate-90' : ''"
         class="select-none material-symbols-outlined w-10 text-center text-[48px] cursor-pointer hover:rotate-90 duration-300"
         >chevron_right</span
