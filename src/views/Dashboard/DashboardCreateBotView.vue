@@ -4,7 +4,7 @@
     <div class="flex flex-grow">
       <div class="flex m-12 justify-center flex-grow">
         <div
-          class="bg-dark-grey flex items-center text-lg p-10 gap-6 flex flex-col rounded-xl text-white"
+          class="bg-dark-grey flex items-center text-lg p-10 gap-6 flex-col rounded-xl text-white"
         >
           <h1 class="text-center text-4xl font-black">CREATE A BOT</h1>
           <h1

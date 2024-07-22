@@ -6,17 +6,17 @@ import SecondarySidebar from '@/components/SecondarySidebar/SecondarySidebar.vue
 <template>
   <div class="flex center flex-grow">
     <keep-alive>
-      <component :is="Sidbar" class="flex-2"></component>
+      <component :sidebar_opened="sidebar_opened" :is="Sidbar" class="flex-2"></component>
     </keep-alive>
     <div
       :key="$route.params.id"
-      class="px-8 py-6 max-h-[calc(100vh-100px)] flex-col sm:flex-row overflow-y-scroll flex gap-6 flex-1"
+      class="px-4 md:px-8 py-6 max-h-[calc(100vh-100px)] flex-col sm:flex-row overflow-y-scroll flex gap-6 flex-1"
     >
       <SecondarySidebar :modules="actives_module" v-show="$route.params.id" />
       <router-view
         @moduleUpdate="updateModules"
         :key="$route.params.module_id"
-        class="rounded-xl p-5 bg-dark-grey w-full"
+        class="rounded-xl p-2 md:p-5 bg-dark-grey w-full"
       />
     </div>
   </div>
@@ -26,6 +26,7 @@ import SecondarySidebar from '@/components/SecondarySidebar/SecondarySidebar.vue
 import { API } from '@/script/api'
 
 export default {
+  props: ['sidebar_opened'],
   async beforeCreate() {
     this.actives_module = (await API.modules.getAllOfBot(this.$route.params.id)).data ?? []
   },

@@ -19,7 +19,7 @@ export default {
 }
 </script>
 <template>
-  <div class="secondary-sidebar flex-col gap-2 items-center p-4 flex w-80 bg-primary rounded-xl">
+  <div class="secondary-sidebar flex-col gap-2 items-center p-4 flex w-full sm:w-80 bg-primary rounded-xl">
     <div class="avatar">
       <img
         v-if="bot?.image"

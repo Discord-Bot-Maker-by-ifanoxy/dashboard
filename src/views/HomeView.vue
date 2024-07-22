@@ -102,14 +102,14 @@ export default defineComponent({
           posX += (mouseX - posX) / 9
           posY += (mouseY - posY) / 9
 
-          TM.set(follower, {
+          if (follower) TM.set(follower, {
             css: {
               left: posX - 12,
               top: posY - 12
             }
           })
 
-          TM.set(cursor, {
+          if (cursor) TM.set(cursor, {
             css: {
               left: mouseX,
               top: mouseY

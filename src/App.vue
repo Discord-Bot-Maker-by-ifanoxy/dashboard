@@ -5,11 +5,11 @@ import Navbar from '@/components/Navbar.vue'
 
 <template>
   <div class="max-h-screen h-screen dashboard flex flex-col bg-grey">
-    <navbar :user="user" />
+    <navbar @sidebar_opened="x => sidebar_opened = x" :user="user" />
     <RouterView v-slot="{ Component }">
       <transition>
         <div class="flex flex-col flex-grow component-wrapper">
-          <component :is="Component" />
+          <component :sidebar_opened="sidebar_opened" :is="Component" />
         </div>
       </transition>
     </RouterView>
@@ -38,12 +38,12 @@ export default {
   },
   data() {
     return {
-      user: null
+      user: null,
+      sidebar_opened: false
     }
   },
   watch: {
     async $route(a, b) {
-      console.log(a.path, b.path)
       if (b.path === '/login/callback') {
         const res = await API.check()
         if (res.status === 200) this.user = res.data
